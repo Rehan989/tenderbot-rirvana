@@ -13,6 +13,24 @@ from functions import generate_answer, save_result
 from prompts import questions
 import certifi
 
+import streamlit as st
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+
+
+# Load the configuration
+with open('users.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+# Initialize the authenticator
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days']
+)
+
 
 # Function to extract links from a PDF
 def extract_links_from_pdf(pdf_path):
@@ -186,16 +204,30 @@ def ask_question_page():
 
 # Main function to manage the flow
 def main():
-    # Only show "Ask a Question" page if results have been generated
-    if st.session_state.get('result_generated', False):
-        page = st.sidebar.selectbox("Navigate", ["Main Page", "Ask a Question"])
-    else:
-        page = "Main Page"  # Default to the main page if results aren't generated
 
-    if page == "Main Page":
-        main_page()
-    elif page == "Ask a Question":
-        ask_question_page()
+    try:
+        authenticator.login()
+    except Exception as e:
+        st.error(e)
+    # Only show "Ask a Question" page if results have been generated
+
+
+    if st.session_state['authentication_status']:
+        authenticator.logout("Logout", "sidebar")
+        if st.session_state.get('result_generated', False):
+            page = st.sidebar.selectbox("Navigate", ["Main Page", "Ask a Question"])
+        else:
+            page = "Main Page"  # Default to the main page if results aren't generated
+
+        if page == "Main Page":
+            main_page()
+        elif page == "Ask a Question":
+            ask_question_page()
+    elif st.session_state['authentication_status'] is False:
+        st.error("Username/password is incorrect")
+    elif st.session_state['authentication_status'] is None:
+        st.warning("Please enter your username and password")
+
 
 
 if __name__ == "__main__":

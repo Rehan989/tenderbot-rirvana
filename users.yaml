@@ -1,0 +1,17 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+
+credentials:
+  usernames:
+    rirvana:
+      email: jsmith@gmail.com
+      first_name: Rirvana
+      last_name: Energy
+      password: password123  # This will be hashed automatically
+    rirvana-guest:
+      email: rbriggs@gmail.com
+      first_name: Rirvana
+      last_name: Guest
+      password: password123  # This will be hashed automatically

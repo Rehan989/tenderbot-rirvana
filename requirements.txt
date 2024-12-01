@@ -8,3 +8,4 @@ flask-cors
 bs4
 tldextract
 python-dotenv
+streamlit-authenticator
