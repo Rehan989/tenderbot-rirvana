@@ -1,0 +1,10 @@
+certifi
+fitz
+flask
+openai
+streamlit
+pymupdf
+flask-cors
+bs4
+tldextract
+python-dotenv
