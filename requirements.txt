@@ -3,7 +3,7 @@ fitz
 flask
 openai
 streamlit
-pymupdf
+PyMuPDF
 flask-cors
 bs4
 tldextract
